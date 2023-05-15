@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="tree_view_purchase_lines" model="ir.ui.view">
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="vendor_products_ids" invisible="1"/>
+            </xpath>
+            <field name="product_id" position="replace">
+                <field name="product_id" domain="[('id','in', vendor_products_ids)]"/>
+            </field>
+        </field>
+    </record>
+</odoo>

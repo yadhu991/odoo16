@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="customer_details" name="customer Detail">
+        <t t-call="website.layout">
+            <div class="container">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-6">
+                            <span t-field="user.image_1920"
+                                  t-options="{'widget': 'image'}"/>
+                        </div>
+                        <div class="col-6">
+                            <div class="prod_details">
+                                <h1 t-field="user.name"/>
+                                <ul class="prod_desc_list">
+                                    <li>
+                                        <t t-esc="user.email"/>
+                                    </li>
+                                    <t t-if="user.phone">
+                                        <li>
+                                            <t t-esc="user.phone"/>
+                                        </li>
+                                    </t>
+                                    <t t-if="user.website">
+                                        <li>
+                                            <t t-esc="user.website"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

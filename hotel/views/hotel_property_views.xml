@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="accommodation_menu_action" model="ir.actions.act_window">
+        <field name="name">Accommodation</field>
+        <field name="res_model">hotel.property</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+    <record id="tree_view_guest" model="ir.ui.view">
+        <field name="model">hotel.property</field>
+        <field name="arch" type="xml">
+            <tree string="Channel" default_order='date_field_check_in desc'
+                  decoration-danger="date_check_out == current_date and state != 'check-out'"
+                  decoration-warning="state =='check-out' and date_check_out == current_date ">
+                <field name="reference_no"/>
+                <field name="partner_id"/>
+                <field name="room_id" widget="many2many_tags"/>
+                <field name="state" widget="badge" decoration-success="state == 'check-in' "
+                       decoration-info="state == 'check-out' "
+                       decoration-danger="state == 'cancel'" decoration-warning="state =='draft'"/>
+                <field name="date_check_out" string="Expected check-out"
+                />
+                <field name="type" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="search_view_accommodation" model="ir.ui.view">
+        <field name="name">delivery.carrier.search</field>
+        <field name="model">hotel.property</field>
+        <field name="arch" type="xml">
+            <search string="Delivery Carrier">
+                <field name="room_id" string="Room"/>
+                <field name="partner_id" string="guest"/>
+                <field name="reference_no" string="sequence"/>
+                <separator/>
+                <!--                <filter string="Today's checkouts" name="accommodation"-->
+                <!--                        domain="[('state', '!=', 'cancel'),('date_check_out', '=', datetime.datetime.now())]"/>-->
+                <filter string="Check-in" name="check-in" domain="[('state', '=', 'check-in')]"/>
+                <filter string="Current-day" name="today"
+                        domain="[('date_check_out', '=', datetime.datetime.now())]"/>
+                <filter string="Tomorrow" name="tomorrow"
+                        domain="[('date_check_out', '=', datetime.datetime.now() + datetime.timedelta(days=1))]"/>
+                <filter string="Rooms" name="check-in" domain="[('room_id', '!=', False)]"/>
+
+                <group expand="1" string="Group By">
+
+                    <filter string="Bed type" name="bed_filter" context="{'group_by':'type', 'residual_visible':True}"/>
+                    <filter string="Status" name="fa_filter"
+                            context="{'group_by':'state', 'residual_visible':True}"/>
+
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="form_view_guest" model="ir.ui.view">
+        <field name="model">hotel.property</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
+                    <button name="action_checkout" type="object" states="check-in" string="Check-out"
+                            class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="check-in"/>
+                    <button name="action_draft" type="object" string="Reset to draft "
+                            states="cancel,check-in"
+                    />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,check-in,check-out"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="show_order" string="invoice" type="object" class="oe_stat_button"
+                                icon="fa-cutlery" states="check-in,check-out">
+                            <field name="order_id" widget="statinfo" string="Order"/>
+                        </button>
+                        <button name="show_invoice" string="invoice" type="object" class="oe_stat_button"
+                                icon="fa-print" states="check-out">
+                            <field name="payment_id" widget="statinfo" string="Invoice"/>
+                        </button>
+
+                    </div>
+                    <div>
+                        <widget name="web_ribbon" title="Paid"
+                                attrs="{'invisible': [('payment_state','!=','paid')]}"/>
+                        <widget name="web_ribbon" title=" Not Paid" bg_color="bg-danger"
+                                attrs="{'invisible': [('payment_state','!=','not_paid')]}"/>
+                    </div>
+                    <h1>
+                        <field name="reference_no" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group string="Guest">
+                            <field name="partner_id" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                                   options="{&quot;always_reload&quot;: True}"/>
+
+                            <field name="number_of_guests" on_change="price_changed()"/>
+
+                            <field name="expected_days" states="draft,check-in"/>
+                            <field name="date_field_check_in" states="draft,check-in,check-out"/>
+                            <field name="date_field_check_out" states="check-out"/>
+                            <field name="date_check_out" string="Expected check-out"
+                                   states="draft,check-in,check-out,cancel"/>
+
+                        </group>
+                        <group string="Room">
+                            <field name="room_facilities_id" string="facilities" widget="many2many_tags"
+                                   options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="type" string="Type of bed"/>
+                            <field name="created_date" string="Created Date"/>
+
+
+                            <field name="room_id" string="Rooms" widget="many2many_tags"
+                                   options="{'no_create': True, 'no_create_edit':True}"
+                                   attrs="{'readonly': [('state','=','check-in')] }"
+                                   domain="[('room_facilities_id','in',room_facilities_id),('type','=',type),('state', '=', 'available')]"
+                                   placeholder="select facilities and bed type that you need"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Guest details">
+                            <field name="guest_info_id" widget="section_one2many"/>
+                        </page>
+                        <page string="Payment">
+                            <field name="payment_ids" widget="section_one2many"/>
+                            <group>
+                                <group string=" details">
+                                    <field name="order_id" string="order"/>
+                                    <field name="payment_id" readonly="True"/>
+                                    <field name="payment_state" readonly="True"/>
+                                    <field name="currency_id" invisible="1"/>
+
+
+                                </group>
+                                <group string="total">
+                                    <h3>
+                                        <field name="total" widget="monetary"/>
+                                    </h3>
+                                    <field name="currency_id" invisible="1"/>
+
+                                </group>
+                            </group>
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                    <!--                    <field name="attachment_ids"/>-->
+
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <menuitem id="hotel_property_menu" name="Hotel Room Management">
+        <menuitem id="hotel_reception_menu" name="Reception">
+            <menuitem id="hotel_accommodation_menu" name="Accommodation" action="accommodation_menu_action"/>
+            <menuitem id="Order_food_menu" name="Orders" action="order_food_action"/>
+
+        </menuitem>
+        <menuitem id="hotel_configuration_menu" name="Configuration">
+            <menuitem id="hotel_rooms_menu" action="hotel_room_action"/>
+            <menuitem id="room_facility_menu" action="room_facility_action"/>
+            <menuitem id="food_category_menu" action="food_category_action"/>
+            <menuitem id="products_menu" action="hotel_products_action"/>
+            <menuitem id="order_menu" action="hotel_order_menu_action"/>
+
+        </menuitem>
+        <menuitem id="reporting_hotel" name="Report">
+            <menuitem id="report" name=" Hotel Management Report" sequence="10"
+                      action="hotel_model_report_wizard_action"/>
+        </menuitem>
+    </menuitem>
+</odoo>

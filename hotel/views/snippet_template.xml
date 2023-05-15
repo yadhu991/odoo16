@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="basic_snippet" name="Top 10 Customers">
+        <section class="container dynamic_customers">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Top 10 Customers</h1>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <div id="items">
+                    </div>
+                    <div>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+    <template id="external_snippets" inherit_id="website.snippets" priority="8">
+        <xpath expr="//div[@id='snippet_effect']//t[@t-snippet][last()]"
+               position="after">
+            <t t-snippet="hotel.basic_snippet"
+            />
+        </xpath>
+    </template>
+</odoo>

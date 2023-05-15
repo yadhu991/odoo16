@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="coc_bot_action" model="ir.actions.act_window">
+        <field name="name">Coc</field>
+        <field name="res_model">coc.bot.4</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="tree_view_coc" model="ir.ui.view">
+        <field name="model">coc.bot.4</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="partner_id"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="main_menu" name="Coc Bot" action="coc_bot_action"></menuitem>
+</odoo>

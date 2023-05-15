@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="food_category_action" model="ir.actions.act_window">
+        <field name="name">Product Categories</field>
+        <field name="res_model">food.categories</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="tree_view_categories" model="ir.ui.view">
+        <field name="model">food.categories</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+
+            </tree>
+        </field>
+    </record>
+    <record id="form_view_categories" model="ir.ui.view">
+        <field name="model">food.categories</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+
+
+                <sheet>
+                    <group>
+                        <group string="Category">
+                            <field name="name"/>
+                            <group string="">
+                                <field name="products_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <group string="color">
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+</odoo>

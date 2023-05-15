@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="coc_5_action" model="ir.actions.act_window">
+        <field name="name">Coc#5</field>
+        <field name="res_model">coc.5</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="tree_view_coc" model="ir.ui.view">
+        <field name="model">coc.5</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="form_view_order_menu" model="ir.ui.view">
+        <field name="model">coc.5</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <sheet>
+                    <group>
+                        <field name="state" widget="selection_badge" options="{'clickable': 1}"/>
+                    </group>
+<!--                    <group>-->
+<!--                        <button special="cancel" type="object" string="Pass" class="btn-success"/>-->
+<!--                        <button special="cancel" type="object" string="Fail" class="btn-danger"/>-->
+
+<!--                    </group>-->
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <menuitem id="main_menu" name="Coc#5" action="coc_5_action"></menuitem>
+</odoo>

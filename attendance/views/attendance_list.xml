@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="Attendance_list_action" model="ir.actions.act_window">
+        <field name="name">Daily Absentees List</field>
+        <field name="res_model">attendance.list</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_date': 1}</field>
+
+    </record>
+    <record id="tree_view_attendance_list" model="ir.ui.view">
+        <field name="model">attendance.list</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date_list"/>
+            </tree>
+        </field>
+    </record>
+    <record id="search_view_attendance_list" model="ir.ui.view">
+        <field name="name">attendance.search</field>
+        <field name="model">attendance.list</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="1" string="Group By">
+                    <filter string="group by date" name="date"
+                            context="{'group_by': 'create_date:day', 'residual_visible':True}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="form_view_attendance_list" model="ir.ui.view">
+        <field name="model">attendance.list</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <sheet>
+                    <group>
+                        <group string="details">
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                            <field name="phone"/>
+                            <field name="mail"/>
+
+                        </group>
+                        <group>
+                            <field name="image" widget="image" class="oe_avatar m-0"/>
+                            <field name="manager_id"/>
+                            <field name="work_address_id" context="{'show_address': 1}"/>
+                            <field name="work_location_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <menuitem id="main_menu" name="Absentees List" parent="hr_attendance.menu_hr_attendance_root"
+              action="Attendance_list_action"></menuitem>
+</odoo>

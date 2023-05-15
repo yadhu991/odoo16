@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="search_view_hotel_room" model="ir.ui.view">
+        <field name="name">delivery.carrier.search</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <search string="Delivery Carrier">
+                <field name="type" string="Carrier"/>
+                <separator/>
+                <filter string="Available" name="available"
+                        domain="[('state', '=', 'available')]"/>
+                <group expand="1" string="Group By">
+                    <filter string="bed type" name="bed_filter" context="{'group_by':'type', 'residual_visible':True}"/>
+                    <filter string="Facilities" name="fa_filter"
+                            context="{'group_by':'room_facilities_id', 'residual_visible':True}"/>
+
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="tree_view_hotel_room" model="ir.ui.view">
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="reference_no" string="Room number"/>
+                <field name="type" string="Type of bed"/>
+
+                <field name="room_facilities_id" widget="many2many_tags" options="{'color_field': 'color'}"
+                       readonly="1"/>
+                <field name="state" widget="badge" decoration-success="state == 'available' "
+                       decoration-danger="state == 'booked'"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="fee" string="Rent per Day" widget="monetary"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="form_view_hotel_room" model="ir.ui.view">
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="available,booked"/>
+                </header>
+
+                <sheet>
+                    <group string="room number">
+                        <h1>
+                            <field name="reference_no" readonly="1" string="Room number"/>
+                        </h1>
+                    </group>
+                    <group>
+
+                        <group string="room">
+                            <field name="type" string="Type of bed"/>
+                            <field name="attrs" attrs="{'invisible': [('type','!=','dormitory')]}"/>
+                            <field name="guest_id" string="guest"/>
+                        </group>
+                        <group string="facilities and price">
+                            <field name="room_facilities_id" widget="many2many_tags"
+                                   options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="fee" string="Rent" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+
+
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="hotel_room_action" model="ir.actions.act_window">
+        <field name="name">Rooms</field>
+        <field name="res_model">hotel.room</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
