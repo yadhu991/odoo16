@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="clear_cart_button" inherit_id="website_sale.cart"
+              customize_show="True" name="Clear Cart Button">
+        <xpath expr="//a[@href='/shop']" position="after">
+            <t t-if="website_sale_order.website_order_line">
+                <button class="btn btn-danger" id="clear_button"
+                        style="margin-top: -30px;">
+                    <a href=""
+                       id="clear_cart_button"
+                       style="color: white ; text-decoration:none; ">
+                        <span class="fa fa-trash-o"/>
+                        <b>Clear Cart</b>
+                    </a>
+                </button>
+            </t>
+        </xpath>
+    </template>
+</odoo>

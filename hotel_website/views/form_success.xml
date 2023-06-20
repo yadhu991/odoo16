@@ -1,0 +1,30 @@
+<odoo>
+    <template id="tmp_customer_form_success"
+              name="Customer Form Successfully Submitted">
+        <t t-call="website.layout">
+            <br></br>
+            <br></br>
+            <div id="wrap">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="alert alert-info">
+                            Hotel Room Booked Successfully.<br></br>
+                            <h6><b>Booking Id : <t t-esc="booking_id"/></b></h6>
+                            <h6><b>Booking Date : <t t-esc="booking_date" t-options='{"widget":"date"}'/></b></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <center>
+                <button type="submit"
+                        class="btn btn-success">
+                    <a href="http://cybrosys:8022/@/" style="color: white ; text-decoration:none;">Go Home</a>
+                </button>
+                <button type="submit"
+                        class="btn btn-info">
+                    <a href="http://cybrosys:8022/@/appointment" style="color: white; text-decoration:none;">New Booking</a>
+                </button>
+            </center>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="OrderLinesOwner" t-inherit="point_of_sale.OrderWidget" t-inherit-mode="extension" owl="1">
+            <xpath expr="//t[@t-foreach='orderlinesArray']" position="inside">
+                  <t t-if="orderline.product.owner_id">
+                                <li class="orderline"
+                                    style="font-weight:bold;">
+                                    Owner :
+                                    <t t-esc="orderline.product.owner_id[1]"/>
+                                </li>
+                  </t>
+                <hr style="border:solid 1.4px #8F8F8F;"></hr>
+           </xpath>
+    </t>
+</templates>

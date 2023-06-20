@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="DiscountButtontemplatePOS" t-inherit="point_of_sale.ProductScreen"
+       t-inherit-mode="extension" owl="1">
+            <xpath expr="//div[hasclass('control-buttons')]" position="inside">
+                <t t-if="env.pos.config.discount">
+                    <div class="control-button"
+                         t-on-click="_displaydiscountPopup"><i class="fa fa-magic" role="img" aria-label="Info" title="Info"/>
+                        Discount
+                        <t t-esc="env.pos.config.discount_type"/>
+                    </div>
+                </t>
+            </xpath>
+    </t>
+</templates>

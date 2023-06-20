@@ -1,7 +1,5 @@
 from odoo import fields, models, api
 
-from datetime import timedelta
-
 from odoo.exceptions import ValidationError
 
 
@@ -18,31 +16,40 @@ class HotelProperty(models.Model):
         string="Guest",
         required=True, index=True
     )
+    email = fields.Char(related="partner_id.email")
+    phone = fields.Char(related="partner_id.phone")
     created_date = fields.Datetime(default=fields.Datetime.today())
     payment_id = fields.Many2one('account.move', string="Invoice")
-    payment_state = fields.Selection(related="payment_id.payment_state", string="payment state")
+    payment_state = fields.Selection(related="payment_id.payment_state",
+                                     string="payment state")
     room_id = fields.One2many('hotel.room', 'reception_id', string="Room")
-    room_rent = fields.Monetary(related="room_id.fee", string="Room rent per day", required=True)
+    room_rent = fields.Monetary(related="room_id.fee",
+                                string="Room rent per day", required=True)
 
     number_of_guests = fields.Integer(string="Number of guests", tracking=True)
     date_check_in = fields.Datetime('Check-in-date', tracking=True)
     date_check_out = fields.Datetime('Check-out-date', tracking=True)
     type = fields.Selection(
         string='Bed-Type',
-        selection=[('single', 'Single'), ('double', 'Double'), ('dormitory', 'Dormitory'), ],
+        selection=[('single', 'Single'), ('double', 'Double'),
+                   ('dormitory', 'Dormitory'), ],
         help="Type is used to select type of bed that you wanted")
 
     reference_no = fields.Char(string='Order Reference',
                                readonly=True, default=lambda self: 'New')
     room_facilities_id = fields.Many2many('room.tags', string='Room facilities')
     expected_days = fields.Integer(string="Expected days")
-    date_field_check_in = fields.Datetime(string='Check-in date', readonly=True)
-    date_field_check_out = fields.Datetime(string='Check-out date', readonly=True)
+    date_field_check_in = fields.Datetime(string='Check-in date', readonly=True,
+                                          tracking=10)
+    date_field_check_out = fields.Datetime(string='Check-out date',
+                                           readonly=True, tracking=2)
 
     state = fields.Selection(
-        selection=[('draft', "draft"), ('check-in', "check-in"), ('check-out', "check-out"),
+        selection=[('draft', "draft"), ('check-in', "check-in"),
+                   ('check-out', "check-out"),
                    ('cancel', "Cancelled")], string="Status", default='draft')
-    guest_info_id = fields.One2many('guest.info', 'accommodation_id', string='Guest information')
+    guest_info_id = fields.One2many('guest.info', 'accommodation_id',
+                                    string='Guest information')
     payment_ids = fields.One2many('payment.guest', 'acc_id', string='list')
 
     status = fields.Selection(related="room_id.state", string="Room status")
@@ -50,10 +57,12 @@ class HotelProperty(models.Model):
     #                                   required=True)
     company_id = fields.Many2one('res.company', store=True, copy=False,
                                  string="Company",
-                                 default=lambda self: self.env.user.company_id.id)
+                                 default=lambda
+                                     self: self.env.user.company_id.id)
     currency_id = fields.Many2one('res.currency', string="Currency",
                                   related='company_id.currency_id',
-                                  default=lambda self: self.env.user.company_id.currency_id.id)
+                                  default=lambda
+                                      self: self.env.user.company_id.currency_id.id)
     total = fields.Monetary(compute='_compute_total', string="total")
     order_id = fields.Many2one('order.food', readonly=True)
 
@@ -148,7 +157,8 @@ class HotelProperty(models.Model):
 
     @api.depends('guest_info_id')
     def action_confirm(self):
-        """raise warnings when given guest details are mismatch also for attaching docs"""
+        """raise warnings when given guest details are mismatch also for
+        attaching docs"""
 
         guest_number = len(self.guest_info_id)
         if self.number_of_guests > guest_number:
@@ -167,7 +177,7 @@ class HotelProperty(models.Model):
             self.date_field_check_in = fields.Datetime.today()
             for rec in self.room_id:
                 print(rec.days, rec.fee, rec.reception_id.id)
-                self.payment_ids.create({'product_name': 4,
+                self.payment_ids.create({'description': 'room rent',
                                          'quantity': rec.days,
                                          'unit_price': rec.fee,
                                          'acc_id': rec.reception_id.id,
@@ -186,4 +196,6 @@ class HotelProperty(models.Model):
         """compute expected days"""
         for item in self:
             if item.expected_days:
-                item.date_check_out = fields.Datetime.add(fields.Datetime.now(), days=item.expected_days)
+                item.date_check_out = fields.Datetime.add(fields.Datetime.now(),
+                                                          days=item.expected_days)
+                print(self.date_check_out)

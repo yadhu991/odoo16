@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="tree_view_contact_relation" model="ir.ui.view">
+        <field name="model">contact.relation</field>
+        <field name="arch" type="xml">
+            <tree string="Channel" editable="bottom">
+                <field name="questions_id" domain="[('survey_id', '=', survey_id)]"/>
+                <field name="survey_id" invisible="1"/>
+                <field name="res_partner_fields"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

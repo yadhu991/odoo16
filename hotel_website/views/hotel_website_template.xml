@@ -5,7 +5,7 @@
             <div id="wrap" class="oe_structure oe_empty">
                 <section class="s_website_form" data-vcss="001"
                          data-snippet="s_website_form">
-                    <div class="container">
+                    <div class="container hotel_booking">
                         <form action="/appointment/submit/" method="post"
                               enctype="multipart/form-data"
                               class="o_mark_required" data-mark="*"
@@ -32,58 +32,38 @@
                                             </span>
                                         </label>
                                         <div class="col-sm">
-                                            <select name="partner_id"
-                                                    t-attf-class="form-control s_website_form_input"
-                                                    required="1">
-                                                <t t-foreach="partners or []"
-                                                   t-as="partner">
-                                                    <option t-att-value="partner.id">
-                                                        <t t-esc="partner.name"/>
-                                                    </option>
-                                                </t>
-                                            </select>
-                                        </div>
-                                        <!--                                        <label class="col-form-label col-sm-auto s_website_form_label"-->
-                                        <!--                                               style="width: 200px"-->
-                                        <!--                                               for="studio1">-->
-                                        <!--                                            <span class="s_website_form_label_content">-->
-                                        <!--                                                Name-->
-                                        <!--                                            </span>-->
-                                        <!--                                            <span class="s_website_form_mark">-->
-                                        <!--                                                *-->
-                                        <!--                                            </span>-->
-                                        <!--                                        </label>-->
-                                        <!--                                        <div class="col-sm">-->
-                                        <!--                                            <input id="name" type="text"-->
-                                        <!--                                                   class="form-control s_website_form_input"-->
-                                        <!--                                                   name="name" required="1"/>-->
-                                        <!--                                        </div>-->
-                                    </div>
-                                </div>
-                                <br></br>
-                                <br></br>
-                                <div class="form-group col-12 s_website_form_field s_website_form_required"
-                                     data-type="char" data-name="Field">
-                                    <div class="row s_col_no_resize s_col_no_bgcolor">
-                                        <label class="col-form-label col-sm-auto s_website_form_label"
-                                               style="width: 200px"
-                                               for="studio1">
-                                            <span class="s_website_form_label_content">
-                                                NO. of Guests
-                                            </span>
-                                            <span class="s_website_form_mark">
-                                                *
-                                            </span>
-                                        </label>
-                                        <div class="col-sm">
-                                            <input id="phone" type="number"
+                                            <input list="partner_id"
+                                                   style="width: 50%;"
+                                                   name="partner_id"
+                                                   id="browser"
                                                    class="form-control s_website_form_input"
-                                                   name="phone" required="1" min="1"/>
+                                                   required="1">
+                                                <datalist name="partner_id"
+                                                          id="partner_id"
+                                                          style="width: 80%;"
+                                                          required="1">
+                                                    <t t-foreach="partners or []"
+                                                       t-as="partner">
+                                                        <option t-att-value="partner.id"
+                                                                style="display: none ;">
+                                                            <t t-esc="partner.name" style="display: none ;"/>
+
+                                                        </option>
+                                                    </t>
+                                                </datalist>
+                                            </input>
                                         </div>
+
                                     </div>
                                 </div>
                                 <br></br>
                                 <br></br>
+                                <div class="col-sm" invisible="1">
+                                    <input id="cust_id" type="text"
+                                           invisible="1"
+                                           style="display: none ;"
+                                           name="cust_id"/>
+                                </div>
                                 <div class="form-group col-12 s_website_form_field s_website_form_required"
                                      data-type="char" data-name="Field">
                                     <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -93,15 +73,121 @@
                                             <span class="s_website_form_label_content">
                                                 Email
                                             </span>
+
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="email" type="email"
+                                                   style="width: 50%;"
+                                                   class="form-control s_website_form_input  email"
+                                                   name="email"></input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <div class="form-group col-12 s_website_form_field s_website_form_required"
+                                     data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                Phone
+                                            </span>
                                             <span class="s_website_form_mark">
                                                 *
                                             </span>
                                         </label>
                                         <div class="col-sm">
-                                            <input id="email" type="email"
+                                            <input id="phone" type="text"
+                                                   style="width: 50%;"
                                                    class="form-control s_website_form_input"
-                                                   name="email" required="1"/>
+                                                   name="phone" required="1"/>
                                         </div>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <div class="form-group col-12 s_website_form_field s_website_form_required"
+                                     data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                No. of Guests
+                                            </span>
+                                            <span class="s_website_form_mark">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="number_of_guests"
+                                                   type="number"
+                                                   style="width: 50%;"
+                                                   class="form-control s_website_form_input"
+                                                   name="number_of_guests"
+                                                   required="1"
+                                                   min="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <div class="form-group col-12 s_website_form_field s_website_form_required"
+                                     data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                No. of days
+                                            </span>
+                                            <span class="s_website_form_mark">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="expected_days"
+                                                   type="number"
+                                                   style="width: 50%;"
+                                                   class="form-control s_website_form_input"
+                                                   name="expected_days"
+                                                   required="1"
+                                                   min="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <div class="form-group col-12 s_website_form_field s_website_form_required"
+                                     data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                Bed Type
+                                            </span>
+                                            <span class="s_website_form_mark">
+                                                *
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <select name="type" id="bed_type"
+                                                    style="width: 50%;"
+                                                    t-attf-class="form-control s_website_form_input"
+                                                    required="1">
+                                                <option value="single">Single
+                                                </option>
+                                                <option value="double">Double
+                                                </option>
+                                                <option value="dormitory">
+                                                    Dormitory
+                                                </option>
+                                            </select>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <br></br>
@@ -122,25 +208,26 @@
                                         <div class="col-sm">
                                             <input id="appointment_date"
                                                    type="date"
+                                                   style="width: 50%;"
                                                    class="form-control s_website_form_input"
-                                                   name="appointment_date"
+                                                   name="created_date"
                                                    required="1"/>
                                         </div>
                                     </div>
                                 </div>
                                 <br></br>
                                 <br></br>
-
-
                                 <div class="form-group col-12 s_website_form_submit"
                                      data-name="Submit Button">
                                     <div style="width: 200px;"
                                          class="s_website_form_label"/>
 
-                                    <button type="submit"
+                                    <button type="submit" id="submit"
                                             class="btn btn-primary">Submit
                                     </button>
                                 </div>
+                                <br></br>
+                                <br></br>
                             </div>
                         </form>
                     </div>

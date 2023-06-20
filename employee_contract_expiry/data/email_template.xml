@@ -1,0 +1,41 @@
+<odoo>
+    <data>
+        <record id="contract_expire" model="mail.template">
+            <field name="name">Contract Expire</field>
+            <field name="model_id" ref="employee_contract_expiry.model_hr_contract"/>
+            <field name="email_to">"{{object.hr_responsible_id.partner_id.email}}"</field>
+            <field name="subject">{{ object.employee_id.name }}'s CONTRACT EXPIRE</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <div style="margin: 0px; padding: 0px;">
+                        <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                            Dear <t t-out="object.hr_responsible_id.name"/>,<br/><br/>
+                            This mail is to inform that
+                            <t t-out="object.employee_id.name"/>'s contract
+                            <t t-if="request.env['ir.config_parameter'].sudo().get_param('days')=='0'">
+                                has been expired today.
+                            </t>
+                            <t t-else="">
+                                 is going to be expired within
+                                <t t-out="request.env['ir.config_parameter'].sudo().get_param('days')"/>
+                                days.
+                            </t><br/>
+                            <t t-out="object.employee_id.name"/>
+                            has been working as a
+                            <t t-out="object.job_id.name"/>
+                            under the department of
+                            <t t-out="object.department_id.name"/>
+                            from <t t-out="object.date_start"/>.
+                            <br/>So be prepared to take further actions on the
+                            renewal or the cancellation of the contract.<br/><br/>
+                            Regards,<br/>
+                            <t t-out="request.env.user.name"/>
+                            <br/>
+                            <t t-out="request.env.company.name"/>
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

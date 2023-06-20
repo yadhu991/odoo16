@@ -1,6 +1,8 @@
 from odoo import fields, models, api, _
 from datetime import datetime
 
+from odoo.exceptions import ValidationError
+
 
 class OrderFood(models.Model):
     _name = "order.food"
@@ -10,28 +12,41 @@ class OrderFood(models.Model):
 
     reference_no = fields.Char(string='Order Reference', required=True,
                                readonly=True, default=lambda self: 'New')
-    room_id = fields.Many2one('hotel.room', string="Room", domain="[('state', '=', 'booked')]", tracking=True)
-    accommodation_id = fields.Many2one(related="room_id.reception_id", string="Accommodation Id")
-    guest_id = fields.Many2one(related="room_id.guest_id", string='Guest', tracking=True)
+    room_id = fields.Many2one('hotel.room', string="Room",
+                              domain="[('state', '=', 'booked')]",
+                              tracking=True)
+    accommodation_id = fields.Many2one(related="room_id.reception_id",
+                                       string="Accommodation Id")
+    guest_id = fields.Many2one(related="room_id.guest_id", string='Guest',
+                               tracking=True)
 
-    order_time = fields.Datetime(string='Order time', default=datetime.today(), readonly=True)
+    order_time = fields.Datetime(string='Order time', default=datetime.today(),
+                                 readonly=True)
 
-    category_ids = fields.Many2many('food.categories', tracking=True)
+    category_ids = fields.Many2many('food.categories', tracking=True,
+                                    )
     order_ids = fields.One2many('hotel.products', 'order_id', string='Menu')
 
     order_list_ids = fields.One2many('order.list', 'order_id', string='list')
     company_id = fields.Many2one('res.company', store=True, copy=False,
                                  string="Company",
-                                 default=lambda self: self.env.user.company_id.id)
+                                 default=lambda
+                                     self: self.env.user.company_id.id)
     currency_id = fields.Many2one('res.currency', string="Currency",
                                   related='company_id.currency_id',
-                                  default=lambda self: self.env.user.company_id.currency_id.id)
+                                  default=lambda
+                                      self: self.env.user.company_id.currency_id.id)
     total = fields.Monetary(compute='_compute_total', string="total")
+
+    @api.constrains('category_ids')
+    def _check_category(self):
+        if not self.category_ids:
+            raise ValidationError("please select a category!!!")
 
     @api.onchange('room_id')
     def change_order(self):
-        """ update total based on items"""
-        print(self.id)
+        """ confirm"""
+
         self.accommodation_id.write({'order_id': self.id})
 
     @api.depends('order_list_ids', )
@@ -52,7 +67,8 @@ class OrderFood(models.Model):
     @api.onchange('category_ids')
     def _add_menu(self):
         """for displaying products based on category in  order"""
-        search_rec = self.env['hotel.products'].search([('category', 'in', self.category_ids.ids)])
+        search_rec = self.env['hotel.products'].search(
+            [('category', 'in', self.category_ids.ids)])
         self.write({'order_ids': search_rec.ids})
 
     def add_to_list(self):
