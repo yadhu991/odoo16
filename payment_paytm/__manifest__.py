@@ -10,7 +10,7 @@
     'license': 'LGPL-3',
     'data': [
         'data/paytm_payment_record.xml',
-
+        'views/payment_provider_views.xml',
     ],
     'images': [
         'static/description/icon.png'

@@ -3,13 +3,13 @@
     <data noupdate="1">
         <record id="payment_provider_paytm" model="payment.provider">
             <field name="name">Paytm</field>
-            <field name="display_as">Paytm by india</field>
-<!--            <field name="code">Paytm</field>-->
-<!--            <field name="paytm_merchant_key">demo</field>-->
-<!--            <field name="image_128" type="base64" file="payment_paytm/static/description/icon.png"/>-->
-
-
-
+            <field name="display_as">Paytm</field>
+            <field name="code">paytm</field>
+            <field name="sequence">1</field>
+            <field name="paytm_merchant_id">demo</field>
+            <field name="paytm_merchant_key">demo</field>
+            <field name="image_128" type="base64"
+                   file="payment_paytm/static/description/icon.png"/>
         </record>
     </data>
 

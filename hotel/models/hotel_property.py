@@ -176,13 +176,16 @@ class HotelProperty(models.Model):
             self.room_id.guest_id = self.partner_id
             self.date_field_check_in = fields.Datetime.today()
             for rec in self.room_id:
-                print(rec.days, rec.fee, rec.reception_id.id)
-                self.payment_ids.create({'description': 'room rent',
+                rent = self.env['order.menu'].search([('name', '=', 'Room Rent')])
+                if rent:
+                   rent_product = rent
+                else:
+                    rent_product = self.env['order.menu'].create({'name': 'Room Rent'})
+                self.payment_ids.create({'product_name': rent_product.id,
                                          'quantity': rec.days,
                                          'unit_price': rec.fee,
                                          'acc_id': rec.reception_id.id,
                                          })
-
     # def _compute_attachments(self):
     #     """compute attachments"""
     #     attachment_ids = self.env['ir.attachment'].search([

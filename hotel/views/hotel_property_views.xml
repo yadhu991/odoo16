@@ -157,13 +157,17 @@
     </record>
 
 
-    <menuitem id="hotel_property_menu" name="Hotel Room Management">
-        <menuitem id="hotel_reception_menu" name="Reception">
+    <menuitem id="hotel_property_menu" name="Hotel" web_icon="hotel,static/description/icon.png">
+        <menuitem id="hotel_reception_menu" name="Reception" sequence="1">
             <menuitem id="hotel_accommodation_menu" name="Accommodation" action="accommodation_menu_action"/>
             <menuitem id="Order_food_menu" name="Orders" action="order_food_action"/>
 
         </menuitem>
-        <menuitem id="hotel_configuration_menu" name="Configuration">
+        <menuitem id="reporting_hotel" name="Report" sequence="2">
+            <menuitem id="report" name=" Hotel Management Report" sequence="10"
+                      action="hotel_model_report_wizard_action"/>
+        </menuitem>
+        <menuitem id="hotel_configuration_menu" name="Configuration" sequence="3">
             <menuitem id="hotel_rooms_menu" action="hotel_room_action"/>
             <menuitem id="room_facility_menu" action="room_facility_action"/>
             <menuitem id="food_category_menu" action="food_category_action"/>
@@ -171,9 +175,6 @@
             <menuitem id="order_menu" action="hotel_order_menu_action"/>
 
         </menuitem>
-        <menuitem id="reporting_hotel" name="Report">
-            <menuitem id="report" name=" Hotel Management Report" sequence="10"
-                      action="hotel_model_report_wizard_action"/>
-        </menuitem>
+
     </menuitem>
 </odoo>

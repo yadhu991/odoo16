@@ -37,7 +37,7 @@
         ],
     },
     'images': [
-        'static/description/33777.png'
+        'static/description/icon.png'
     ]
 
 }
